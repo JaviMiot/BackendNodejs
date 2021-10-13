@@ -1,0 +1,13 @@
+const express = require('express');
+const routerApi = require('./routes');
+
+const app = express();
+const port = 3000;
+
+//* agregas un middle para recibit en json
+app.use(express.json());
+routerApi(app);
+
+app.listen(port, () => {
+  console.log(`My port http://localhost:${port} listening`);
+});

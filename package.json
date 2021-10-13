@@ -1,0 +1,25 @@
+{
+  "name": "18_backend_node_express",
+  "version": "1.0.0",
+  "description": "curso",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "lint": "eslint"
+  },
+  "author": "Javier Manobanda <dev.javimanobanda.online> (http://javimanobanda.com/)",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "faker": "^5.5.3",
+    "nodemon": "^2.0.13",
+    "prettier": "^2.4.1"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
