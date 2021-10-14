@@ -1,11 +1,29 @@
 const express = require('express');
+const cors = require('cors');
 const routerApi = require('./routes');
-const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/errorHandler');
+const {
+  logErrors,
+  errorHandler,
+  boomErrorHandler,
+} = require('./middlewares/errorHandler');
 const app = express();
 const port = 3000;
 
 //* agregas un middle para recibit en json
 app.use(express.json());
+
+const whiteList = ['http://localhost:5500', 'https://javimanobanda.com'];
+const options = {
+  origin: (origin, callback) => {
+    if (whiteList.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('no permitido'));
+    }
+  },
+};
+
+app.use(cors(options));
 routerApi(app);
 
 //* en los middleware import el orden
