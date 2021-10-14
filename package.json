@@ -9,6 +9,9 @@
     "start": "node index.js",
     "lint": "eslint"
   },
+  "engines": {
+    "node": "16.6.1"
+  },
   "author": "Javier Manobanda <dev.javimanobanda.online> (http://javimanobanda.com/)",
   "license": "MIT",
   "devDependencies": {

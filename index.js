@@ -7,7 +7,7 @@ const {
   boomErrorHandler,
 } = require('./middlewares/errorHandler');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 //* agregas un middle para recibit en json
 app.use(express.json());
@@ -15,7 +15,7 @@ app.use(express.json());
 const whiteList = ['http://localhost:5500', 'https://javimanobanda.com'];
 const options = {
   origin: (origin, callback) => {
-    if (whiteList.includes(origin)) {
+    if (whiteList.includes(origin) || !origin) {
       callback(null, true);
     } else {
       callback(new Error('no permitido'));
