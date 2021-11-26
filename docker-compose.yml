@@ -3,10 +3,18 @@ services:
   postgres:
     image: postgres:13
     environment:
-      POSTGRES_DB : my_store
-      POSTGRES_USER : javi
-      POSTGRES_PASSWORD : admin123
+      POSTGRES_DB: my_store
+      POSTGRES_USER: javi
+      POSTGRES_PASSWORD: admin123
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
     ports:
       - 5432:5432
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@mail.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+    - 5050:80
