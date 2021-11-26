@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB : my_store
+      POSTGRES_USER : javi
+      POSTGRES_PASSWORD : admin123
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
