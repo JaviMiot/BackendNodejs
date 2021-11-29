@@ -1,32 +1,37 @@
 const boom = require('@hapi/boom');
 
-const getConnection = require('../libs/postgres');
+const { models } = require('../libs/sequelize');
 
 class UserService {
   constructor() { }
 
   async create(data) {
-    return data;
+    const newUser = await models.User.create(data);
+    return newUser;
   }
 
   async find() {
-    const client = await getConnection();
-    const rta = await client.query('SELECT * FROM task');
-    return rta.rows;
+    const rta = await models.User.findAll();
+    return rta;
   }
 
   async findOne(id) {
-    return { id };
+    const user = await models.User.findByPk(id);
+    if (user) {
+      boom.notFound(`User ${id} no found`);
+    }
+    return user;
   }
 
   async update(id, changes) {
-    return {
-      id,
-      changes,
-    };
+    const updateUser = await this.findOne(id);
+    updateUser.update(changes);
+    return updateUser;
   }
 
   async delete(id) {
+    const deleteUser = await this.findOne(id);
+    deleteUser.destroy();
     return { id };
   }
 }

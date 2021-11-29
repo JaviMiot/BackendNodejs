@@ -5,6 +5,7 @@ const {
   logErrors,
   errorHandler,
   boomErrorHandler,
+  errorSequelize
 } = require('./middlewares/errorHandler');
 const app = express();
 const port = process.env.PORT || 3000;
@@ -28,6 +29,7 @@ routerApi(app);
 
 //* en los middleware import el orden
 app.use(logErrors);
+app.use(errorSequelize);
 app.use(boomErrorHandler);
 app.use(errorHandler);
 

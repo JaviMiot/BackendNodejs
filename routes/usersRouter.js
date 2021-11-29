@@ -1,28 +1,73 @@
 const express = require('express');
-const faker = require('faker');
+
+const UserService = require('./../services/userServices');
+const validatorHandler = require('../middlewares/validatorHandle');
+const { updateUserSchema, createUserSchema, getUserSchema } = require('../schema/userSchema');
+
 const router = express.Router();
+const service = new UserService();
 
-const UserService = require('../services/userServices')
-
-const usersDb = new UserService();
-
-
-router.get('/', async (request, response) => {
-  const { limit, offset } = request.query;
-
-  if (limit && offset) {
-    response.json({ limit, offset });
+router.get('/', async (req, res, next) => {
+  try {
+    const users = await service.find();
+    res.json(users);
+  } catch (error) {
+    next(error);
   }
-
-  const users = await usersDb.find();
-  response.json(users);
 });
 
+router.get('/:id',
+  validatorHandler(getUserSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const category = await service.findOne(id);
+      res.json(category);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
-router.get('/:id_user', (request, response) => {
-  const { id_user } = request.params
-  response.json(users[id_user]);
-});
+router.post('/',
+  validatorHandler(createUserSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const newCategory = await service.create(body);
+      res.status(201).json(newCategory);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
+router.patch('/:id',
+  validatorHandler(getUserSchema, 'params'),
+  validatorHandler(updateUserSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const category = await service.update(id, body);
+      res.json(category);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.delete('/:id',
+  validatorHandler(getUserSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      await service.delete(id);
+      res.status(201).json({id});
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;
