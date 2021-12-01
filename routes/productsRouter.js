@@ -25,7 +25,7 @@ router.post(
   async (request, response) => {
     const body = request.body;
     const newProduct = await products.create(body);
-    response.status(201).json({ message: 'creacion', data: newProduct });
+    response.status(201).json(newProduct);
   }
 );
 
@@ -37,7 +37,7 @@ router.get('/filter', (req, res) => {
 router.patch(
   '/:id',
   validatorHandle(getProductSchema, 'params'),
-  validatorHandle(udpdateProductSchema,'body'),
+  validatorHandle(udpdateProductSchema, 'body'),
   async (request, response, next) => {
     try {
       const { id } = request.params;
