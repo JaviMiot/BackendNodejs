@@ -1,10 +1,10 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
-const { USER_TABLE } = require('./user.model')
+const { USER_TABLE } = require('./user.model');
 
 const CUSTOMER_TABLE = 'customers';
 
-const CustomerSchema =  {
+const CustomerSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -42,12 +42,13 @@ const CustomerSchema =  {
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL'
   }
-}
+};
 
 class Customer extends Model {
 
   static associate(models) {
-    this.belongsTo(models.User, {as: 'user'});
+    this.belongsTo(models.User, { as: 'user' });
+    this.hasMany(models.Order, { as: 'orders', foreignKey: 'customerId' });
   }
 
   static config(sequelize) {
@@ -56,7 +57,7 @@ class Customer extends Model {
       tableName: CUSTOMER_TABLE,
       modelName: 'Customer',
       timestamps: false
-    }
+    };
   }
 }
 
