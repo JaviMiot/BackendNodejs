@@ -11,7 +11,18 @@ if (config.isProd) {
   URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
 }
 
-const pool = new Pool({ connectionString: URI });
+let options = {
+  connectionString: URI,
+};
+
+if (config.isProd) {
+  options.ssl = {
+    rejectUnauthorized: false
+  };
+
+}
+
+const pool = new Pool(options);
 
 
 module.exports = pool;
