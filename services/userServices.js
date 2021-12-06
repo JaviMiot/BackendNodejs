@@ -20,8 +20,8 @@ class UserService {
 
   async findOne(id) {
     const user = await models.User.findByPk(id);
-    if (user) {
-      boom.notFound(`User ${id} no found`);
+    if (!user) {
+      throw boom.notFound(`User ${id} no found`);
     }
     return user;
   }
