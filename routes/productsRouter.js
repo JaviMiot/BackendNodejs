@@ -24,6 +24,20 @@ router.get('/', validatorHandle(queryProductSchema, 'query'),
 
   });
 
+router.get(
+  '/:id',
+  validatorHandle(getProductSchema, 'params'),
+  async (request, response, next) => {
+    const { id } = request.params;
+    try {
+      const product = await service.findOne(id);
+      response.status(200).json(product);
+    } catch (error) {
+      next(error); //! mandas el error
+    }
+  }
+);
+
 router.post(
   '/',
   validatorHandle(createProductSchema, 'body'),
@@ -48,7 +62,7 @@ router.patch(
       const { id } = request.params;
       const body = request.body;
       const updateProduct = await service.update(id, body);
-      response.json({ message: 'update', data: updateProduct });
+      response.json(updateProduct);
     } catch (error) {
       next(error);
     }
@@ -61,22 +75,5 @@ router.delete('/:id', async (request, response) => {
   response.json(deletedProduct);
 });
 
-router.get(
-  '/:id',
-  validatorHandle(getProductSchema, 'params'),
-  async (request, response, next) => {
-    try {
-      const product_id = request.params.id;
-      const product = await service.findOne(product_id);
-      if (product_id === 999) {
-        response.status(404).json({ message: 'Product no fount' });
-      } else {
-        response.status(200).json(product);
-      }
-    } catch (error) {
-      next(error); //! mandas el error
-    }
-  }
-);
 
 module.exports = router;
