@@ -16,18 +16,23 @@ class CategoryService {
   }
 
   async findOne(id) {
-    const category = models.Category.findByPk(id, { include: ['products'] });
+    const category = await models.Category.findByPk(id, { include: ['products'] });
+    if (!category) {
+      throw boom.notFound(`category ${id} not found`);
+    }
     return category;
   }
 
   async update(id, changes) {
-    return {
-      id,
-      changes,
-    };
+
+    const updateCategory = await this.findOne(id);
+    updateCategory.update(changes);
+    return updateCategory;
   }
 
   async delete(id) {
+    const deleteCategory = await this.findOne(id);
+    await deleteCategory.destroy();
     return { id };
   }
 
