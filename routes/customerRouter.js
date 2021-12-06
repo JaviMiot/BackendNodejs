@@ -11,9 +11,18 @@ const {
 const router = express.Router();
 const service = new CustomerService();
 
-router.get('/',  async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     res.json(await service.find());
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/:id', async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    res.json(await service.findOne(id));
   } catch (error) {
     next(error);
   }

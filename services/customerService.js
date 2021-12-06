@@ -3,7 +3,7 @@ const { models } = require('../libs/sequelize');
 
 class CustomerService {
 
-  constructor() {}
+  constructor() { }
 
   async find() {
     const rta = await models.Customer.findAll({
@@ -13,7 +13,7 @@ class CustomerService {
   }
 
   async findOne(id) {
-    const user = await models.Customer.findByPk(id);
+    const user = await models.Customer.findByPk(id, { include: ['user'] });
     if (!user) {
       throw boom.notFound('customer not found');
     }
@@ -36,7 +36,7 @@ class CustomerService {
   async delete(id) {
     const model = await this.findOne(id);
     await model.destroy();
-    return { rta: true };
+    return { id };
   }
 
 }
