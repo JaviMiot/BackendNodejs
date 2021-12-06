@@ -54,7 +54,7 @@ class Order extends Model {
       as: 'items',
       through: models.OrderProduct,
       foreignKey: 'orderId',
-      otherKey: 'productId'
+      otherKey: 'productId',
     });
   }
 
