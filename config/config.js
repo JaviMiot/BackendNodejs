@@ -10,7 +10,8 @@ const config = {
   dbName: process.env.DB_NAME,
   dbPort: process.env.DB_PORT,
   dbURL: process.env.DATABASE_URL,
-  apiKey: process.env.API_KEY
+  apiKey: process.env.API_KEY,
+  secret_key: process.env.SECRET_KEY
 };
 
 
