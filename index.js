@@ -31,7 +31,7 @@ const options = {
   },
 };
 
-const checkApiKey = require('./middlewares/authHandler');
+const {checkApiKey} = require('./middlewares/authHandler');
 
 app.get('/', checkApiKey, (req, res) => {
   res.send('nueva ruta');
