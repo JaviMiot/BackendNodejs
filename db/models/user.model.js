@@ -38,7 +38,7 @@ const UserSchema = {
     type: DataTypes.DATE,
     field: 'create_at',
     defaultValue: Sequelize.NOW
-  }
+  },
 };
 
 class User extends Model {

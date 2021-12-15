@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport');
 
 const ProductsService = require('../services/productsService');
 const validatorHandle = require('../middlewares/validatorHandle');
@@ -8,11 +9,13 @@ const {
   getProductSchema,
   queryProductSchema
 } = require('../schema/productSchema');
+const { checkRoles } = require('../middlewares/authHandler');
 
 const router = express.Router(); //* generas un router
 const service = new ProductsService(); //*creo una instancia
 
-router.get('/', validatorHandle(queryProductSchema, 'query'),
+router.get('/',
+  validatorHandle(queryProductSchema, 'query'),
   async (request, response, next) => {
 
     try {
@@ -40,6 +43,8 @@ router.get(
 
 router.post(
   '/',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles('admin'),
   validatorHandle(createProductSchema, 'body'),
   async (request, response) => {
     const body = request.body;
@@ -48,13 +53,10 @@ router.post(
   }
 );
 
-//* un error comun
-router.get('/filter', (req, res) => {
-  res.send('soy un filter');
-});
-
 router.patch(
   '/:id',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles('admin'),
   validatorHandle(getProductSchema, 'params'),
   validatorHandle(udpdateProductSchema, 'body'),
   async (request, response, next) => {
@@ -69,11 +71,14 @@ router.patch(
   }
 );
 
-router.delete('/:id', async (request, response) => {
-  const { id } = request.params;
-  const deletedProduct = await service.delete(id);
-  response.json(deletedProduct);
-});
+router.delete('/:id',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles('admin'),
+  async (request, response) => {
+    const { id } = request.params;
+    const deletedProduct = await service.delete(id);
+    response.json(deletedProduct);
+  });
 
 
 module.exports = router;

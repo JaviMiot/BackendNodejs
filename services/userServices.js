@@ -16,12 +16,12 @@ class UserService {
 
     const newUser = await models.User.create(userData);
 
-    delete newUser.dataValues.password;
-    return newUser;
+    return this.deleteAuthData(newUser);
   }
 
   async find() {
     const rta = await models.User.findAll({
+      attributes: { exclude: ['password', 'recoveryToken'] },
       include: ['customer']
     });
 
@@ -33,7 +33,8 @@ class UserService {
     if (!user) {
       throw boom.notFound(`User ${id} no found`);
     }
-    return user;
+
+    return this.deleteAuthData(user);
   }
 
   async findOneByEmail(email) {
@@ -44,12 +45,26 @@ class UserService {
       }
     );
 
+    if (!user) {
+      throw boom.notFound(`User ${email} no found`);
+    }
+
+    return user;
+  }
+
+  deleteAuthData(user) {
+    delete user.dataValues.password;
+    delete user.dataValues.recoveryToken;
     return user;
   }
 
   async update(id, changes) {
     const updateUser = await this.findOne(id);
-    updateUser.update(changes);
+    try {
+      await updateUser.update(changes);
+    } catch (error) {
+      throw boom.notAcceptable(error);
+    }
     return updateUser;
   }
 

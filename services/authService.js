@@ -24,9 +24,6 @@ class AuthService {
     if (!isMatch) {
       throw boom.unauthorized();
     }
-    console.log(isMatch);
-
-    delete user.dataValues.password;
 
     return user;
 
